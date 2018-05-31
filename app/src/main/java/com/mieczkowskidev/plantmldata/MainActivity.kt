@@ -4,13 +4,15 @@ import android.Manifest
 import android.app.Activity
 import android.content.ContentValues
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
-import com.google.firebase.ml.vision.label.FirebaseVisionLabelDetectorOptions
+import com.google.firebase.ml.vision.FirebaseVision
+import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionDeniedResponse
@@ -19,6 +21,7 @@ import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.single.PermissionListener
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -30,18 +33,46 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         main_button.setOnClickListener { _ -> checkPermissions() }
-        firebaseSettings()
 
     }
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && requestCode == TAKE_PHOTO_REQUEST) {
-            val imageUri = data?.data
-            val bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, imageUri)
+            val cursor = contentResolver.query(Uri.parse(mCurrentPhotoPath),
+                    Array(1) { android.provider.MediaStore.Images.ImageColumns.DATA },
+                    null, null, null)
+            cursor.moveToFirst()
+            val photoPath = cursor.getString(0)
+            cursor.close()
+            val file = File(photoPath)
+            val uri = Uri.fromFile(file)
+
+            Log.d("main", "uri: ${uri.path}")
+            val bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, uri)
+
+            checkPicture(bitmap)
         } else {
             super.onActivityResult(requestCode, resultCode, data)
         }
+    }
+
+    private fun checkPicture(bitmap: Bitmap?) {
+        Log.d("Main", "check picture from bitmap")
+
+        val image = FirebaseVisionImage.fromBitmap(bitmap!!)
+
+        val detector = FirebaseVision.getInstance()
+                .visionLabelDetector
+
+        detector.detectInImage(image)
+                .addOnSuccessListener { data ->
+                    data.forEach { x ->
+                        Log.d("Main", "image entity: ${x.entityId}, label: ${x.label}, confidence: ${x.confidence}")
+                    }
+                }
+                .addOnFailureListener { fail -> Log.e("Main", "failed: ", fail.fillInStackTrace()) }
+
     }
 
     private fun checkPermissions() {
@@ -95,11 +126,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun firebaseSettings() {
-
-        // configure image labeler, by defailt returns 10 labels for image - to change it use the code below
-        var fbOptions = FirebaseVisionLabelDetectorOptions.Builder()
-                .setConfidenceThreshold(0.8f)
-                .build()
-    }
+//    private fun firebaseSettings() {
+//
+////         configure image labeler, by defailt returns 10 labels for image - to change it use the code below
+//        var fbOptions = FirebaseVisionLabelDetectorOptions.Builder()
+//                .setConfidenceThreshold(0.8f)
+//                .build()
+//    }
 }
