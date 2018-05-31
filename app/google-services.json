@@ -1,0 +1,59 @@
+{
+  "project_info": {
+    "project_number": "844291594617",
+    "firebase_url": "https://plantmldata.firebaseio.com",
+    "project_id": "plantmldata",
+    "storage_bucket": "plantmldata.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:844291594617:android:678ac2e0e2fab395",
+        "android_client_info": {
+          "package_name": "com.mieczkowskidev.plantmldata"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "844291594617-39luq2jn2s2818vlcgpcc1lruet7djgg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mieczkowskidev.plantmldata",
+            "certificate_hash": "b1e8c162c07f3195b2dabda27aa7f8716c65c8a8"
+          }
+        },
+        {
+          "client_id": "844291594617-k2s2kldva8s3haobbjf7jq8l6ecrq2e2.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "844291594617-k2s2kldva8s3haobbjf7jq8l6ecrq2e2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC4b6achzLQ0h3IVrjadRmKxhMHYhsuysE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "844291594617-k2s2kldva8s3haobbjf7jq8l6ecrq2e2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
