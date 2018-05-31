@@ -11,6 +11,7 @@ import android.provider.MediaStore
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import com.bumptech.glide.Glide
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import com.karumi.dexter.Dexter
@@ -24,6 +25,10 @@ import java.io.File
 
 
 class MainActivity : AppCompatActivity() {
+
+    companion object {
+        private val TAG = MainActivity::class.java.simpleName
+    }
 
     private val TAKE_PHOTO_REQUEST = 101
     private var mCurrentPhotoPath: String = ""
@@ -48,7 +53,7 @@ class MainActivity : AppCompatActivity() {
             val file = File(photoPath)
             val uri = Uri.fromFile(file)
 
-            Log.d("main", "uri: ${uri.path}")
+            Log.d(TAG, "uri: ${uri.path}")
             val bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, uri)
 
             checkPicture(bitmap)
@@ -58,7 +63,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun checkPicture(bitmap: Bitmap?) {
-        Log.d("Main", "check picture from bitmap")
+        Log.d(TAG, "check picture from bitmap")
 
         val image = FirebaseVisionImage.fromBitmap(bitmap!!)
 
@@ -67,11 +72,25 @@ class MainActivity : AppCompatActivity() {
 
         detector.detectInImage(image)
                 .addOnSuccessListener { data ->
-                    data.forEach { x ->
-                        Log.d("Main", "image entity: ${x.entityId}, label: ${x.label}, confidence: ${x.confidence}")
+                    run {
+                        Log.d(TAG, "list size: ${data.size}")
+                        val stringBuilder = StringBuilder()
+                        data.forEach { x ->
+                            run {
+                                stringBuilder.append("entity: ${x.entityId}, label: ${x.label}, confidence: ${x.confidence} \n")
+                            }
+                        }
+
+
+                        main_text.text = stringBuilder.toString()
+
+                        Glide.with(this)
+                                .load(bitmap)
+                                .into(main_image)
+
                     }
                 }
-                .addOnFailureListener { fail -> Log.e("Main", "failed: ", fail.fillInStackTrace()) }
+                .addOnFailureListener { fail -> Log.e(TAG, "failed: ", fail.fillInStackTrace()) }
 
     }
 
@@ -103,7 +122,7 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     override fun onPermissionDenied(response: PermissionDeniedResponse?) {
-                        Log.e("Main", "No permissions - denied")
+                        Log.e(TAG, "No permissions - denied")
                     }
                 })
                 .check()
