@@ -14,6 +14,7 @@ import android.util.Log
 import com.bumptech.glide.Glide
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
+import com.google.firebase.ml.vision.label.FirebaseVisionLabelDetectorOptions
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionDeniedResponse
@@ -69,6 +70,9 @@ class MainActivity : AppCompatActivity() {
 
         val detector = FirebaseVision.getInstance()
                 .visionLabelDetector
+
+        // custom settings for fb
+        val detector2 = firebaseSettings()
 
         detector.detectInImage(image)
                 .addOnSuccessListener { data ->
@@ -145,11 +149,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-//    private fun firebaseSettings() {
-//
-////         configure image labeler, by defailt returns 10 labels for image - to change it use the code below
-//        var fbOptions = FirebaseVisionLabelDetectorOptions.Builder()
-//                .setConfidenceThreshold(0.8f)
-//                .build()
-//    }
+    private fun firebaseSettings() = FirebaseVisionLabelDetectorOptions.Builder()
+            .setConfidenceThreshold(0.8f)
+            .build()
+
 }
