@@ -110,7 +110,7 @@ class MainActivity : AppCompatActivity() {
                                                                     token: PermissionToken?) {
                         AlertDialog.Builder(this@MainActivity)
                                 .setTitle("Give permissions")
-                                .setMessage("Write storage")
+                                .setMessage("Write storage permission")
                                 .setNegativeButton(android.R.string.cancel,
                                         { dialog, _ ->
                                             dialog.dismiss()
