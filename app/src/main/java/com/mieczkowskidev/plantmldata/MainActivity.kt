@@ -85,7 +85,6 @@ class MainActivity : AppCompatActivity() {
                             }
                         }
 
-
                         main_text.text = stringBuilder.toString()
 
                         Glide.with(this)
