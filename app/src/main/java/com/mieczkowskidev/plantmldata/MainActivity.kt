@@ -152,4 +152,14 @@ class MainActivity : AppCompatActivity() {
             .setConfidenceThreshold(0.8f)
             .build()
 
+    private fun runTextRecognition(bitmap: Bitmap) {
+        val image = FirebaseVisionImage.fromBitmap(bitmap);
+        var detector = FirebaseVision.getInstance().visionTextDetector;
+
+        detector.detectInImage(image)
+                .addOnSuccessListener { Log.d(TAG, "succes") }
+                .addOnFailureListener { Log.e(TAG, "fail: ${it.message}") }
+
+    }
+
 }
