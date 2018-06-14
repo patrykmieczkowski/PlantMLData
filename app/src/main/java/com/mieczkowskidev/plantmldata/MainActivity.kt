@@ -58,6 +58,9 @@ class MainActivity : AppCompatActivity() {
             val bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, uri)
 
             checkPicture(bitmap)
+
+            // alternative run textdetection
+//            runTextRecognition(bitmap)
         } else {
             super.onActivityResult(requestCode, resultCode, data)
         }
@@ -157,7 +160,7 @@ class MainActivity : AppCompatActivity() {
         var detector = FirebaseVision.getInstance().visionTextDetector;
 
         detector.detectInImage(image)
-                .addOnSuccessListener { Log.d(TAG, "succes") }
+                .addOnSuccessListener { it -> Log.d(TAG, "succes: ${it.blocks}") }
                 .addOnFailureListener { Log.e(TAG, "fail: ${it.message}") }
 
     }
