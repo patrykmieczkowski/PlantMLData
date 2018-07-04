@@ -113,17 +113,17 @@ class MainActivity : AppCompatActivity() {
                         AlertDialog.Builder(this@MainActivity)
                                 .setTitle("Give permissions")
                                 .setMessage("Write storage permission")
-                                .setNegativeButton(android.R.string.cancel,
-                                        { dialog, _ ->
-                                            dialog.dismiss()
-                                            token?.cancelPermissionRequest()
-                                        })
-                                .setPositiveButton(android.R.string.ok,
-                                        { dialog, _ ->
-                                            dialog.dismiss()
-                                            token?.continuePermissionRequest()
-                                        })
-                                .setOnDismissListener({ token?.cancelPermissionRequest() })
+                                .setNegativeButton(android.R.string.cancel
+                                ) { dialog, _ ->
+                                    dialog.dismiss()
+                                    token?.cancelPermissionRequest()
+                                }
+                                .setPositiveButton(android.R.string.ok
+                                ) { dialog, _ ->
+                                    dialog.dismiss()
+                                    token?.continuePermissionRequest()
+                                }
+                                .setOnDismissListener { token?.cancelPermissionRequest() }
                                 .show()
                     }
 
@@ -157,7 +157,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun runTextRecognition(bitmap: Bitmap) {
         val image = FirebaseVisionImage.fromBitmap(bitmap);
-        var detector = FirebaseVision.getInstance().visionTextDetector;
+        val detector = FirebaseVision.getInstance().visionTextDetector;
 
         detector.detectInImage(image)
                 .addOnSuccessListener { it -> Log.d(TAG, "succes: ${it.blocks}") }
